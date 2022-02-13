@@ -1,4 +1,4 @@
-package acloudguru_client_go
+package acloudguru
 
 import (
 	"fmt"

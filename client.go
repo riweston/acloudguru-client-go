@@ -16,17 +16,17 @@ type Client struct {
 }
 
 type HeaderStruct struct {
-	xApiKey     string `json:"x-api-key"`
-	xConsumerId string `json:"x-consumer-id"`
+	apiKey     string
+	consumerId string
 }
 
-func NewClient(xApiKey, xConsumerId *string) (*Client, error) {
+func NewClient(apiKey, consumerId *string) (*Client, error) {
 	return &Client{
 		HTTPClient: &http.Client{Timeout: 10 * time.Second},
 		BaseUrl:    HostURL,
 		Auth: HeaderStruct{
-			xApiKey:     *xApiKey,
-			xConsumerId: *xConsumerId,
+			apiKey:     *apiKey,
+			consumerId: *consumerId,
 		},
 	}, nil
 }
@@ -43,8 +43,8 @@ func (c *Client) newRequest(requestMethod, requestPath string) (*http.Request, e
 func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 	req.Header = http.Header{
 		"Content-Type":  []string{"application/json"},
-		"x-api-key":     []string{c.Auth.xApiKey},
-		"x-consumer-id": []string{c.Auth.xConsumerId},
+		"x-api-key":     []string{c.Auth.apiKey},
+		"x-consumer-id": []string{c.Auth.consumerId},
 	}
 	res, err := c.HTTPClient.Do(req)
 	if err != nil {

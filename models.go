@@ -19,3 +19,10 @@ type Subscription struct {
 	TotalSeats     int       `json:"totalSeats"`
 	SeatsInUse     int       `json:"seatsInUse"`
 }
+
+type Response struct {
+	Success bool `json:"success"`
+	Error   struct {
+		ErrorMessage string `json:"errorMessage"`
+	} `json:"error"`
+}

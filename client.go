@@ -1,4 +1,4 @@
-package acloudguru
+package main
 
 import (
 	"fmt"

@@ -81,3 +81,27 @@ func (c *Client) SetUserActivated(user *User, activate bool) (*Response, error) 
 
 	return &postActivateUser, nil
 }
+
+func (c Client) GetUserFromEmail(email string) (*[]User, error) {
+	path := fmt.Sprintf("users?email=%s", email)
+	req, err := c.newRequest("GET", path)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	body, err := c.doRequest(req)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	var getUserEmail []User
+	err = json.Unmarshal(body, &getUserEmail)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	return &getUserEmail, nil
+}

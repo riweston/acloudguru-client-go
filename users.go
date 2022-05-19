@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (c *Client) GetUsers(i int) (*[]User, error) {
+func (c *Client) GetUsersByPage(i int) (user *[]User, error error) {
 	path := fmt.Sprintf("users?page=%d&page-size=250", i)
 	req, err := c.newRequest("GET", path)
 	if err != nil {
@@ -19,22 +19,21 @@ func (c *Client) GetUsers(i int) (*[]User, error) {
 		return nil, err
 	}
 
-	var getUsers []User
-	err = json.Unmarshal(body, &getUsers)
+	err = json.Unmarshal(body, &user)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
 
-	return &getUsers, nil
+	return user, nil
 }
 
-func (c *Client) GetUsersAll() (*[]User, error) {
+func (c *Client) GetUsersAll() (user *[]User, error error) {
 	var getUsers []User
 	i := 0
 	for {
 		i++
-		tempUsers, err := c.GetUsers(i)
+		tempUsers, err := c.GetUsersByPage(i)
 		if err != nil {
 			fmt.Println(err)
 			return nil, err
@@ -53,7 +52,7 @@ func (c *Client) GetUsersAll() (*[]User, error) {
 	return &getUsers, nil
 }
 
-func (c *Client) SetUserActivated(user *User, activate bool) (*Response, error) {
+func (c *Client) SetUserActivated(user *User, activate bool) (response *Response, error error) {
 	var path string
 	if activate {
 		path = fmt.Sprintf("users/%s?action=activate", user.UserId)
@@ -72,17 +71,20 @@ func (c *Client) SetUserActivated(user *User, activate bool) (*Response, error) 
 		return nil, err
 	}
 
-	postActivateUser := Response{}
-	err = json.Unmarshal(body, &postActivateUser)
+	err = json.Unmarshal(body, &response)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
 
-	return &postActivateUser, nil
+	if response.ErrorResponse.ErrorMessage != "" {
+		return nil, fmt.Errorf("%s", response.ErrorResponse.ErrorMessage)
+	}
+
+	return response, nil
 }
 
-func (c Client) GetUserFromEmail(email string) (*[]User, error) {
+func (c Client) GetUserFromEmail(email string) (user *User, error error) {
 	path := fmt.Sprintf("users?email=%s", email)
 	req, err := c.newRequest("GET", path)
 	if err != nil {
@@ -96,12 +98,11 @@ func (c Client) GetUserFromEmail(email string) (*[]User, error) {
 		return nil, err
 	}
 
-	var getUserEmail []User
-	err = json.Unmarshal(body, &getUserEmail)
+	err = json.Unmarshal(body, &user)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
 
-	return &getUserEmail, nil
+	return user, nil
 }

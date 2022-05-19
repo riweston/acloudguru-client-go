@@ -21,8 +21,8 @@ type Subscription struct {
 }
 
 type Response struct {
-	Success bool `json:"success"`
-	Error   struct {
+	Success       bool `json:"success"`
+	ErrorResponse struct {
 		ErrorMessage string `json:"errorMessage"`
 	} `json:"error"`
 }

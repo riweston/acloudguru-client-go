@@ -1,4 +1,4 @@
-package acloudguru
+package main
 
 import "time"
 
@@ -18,4 +18,11 @@ type Subscription struct {
 	EndDate        time.Time `json:"endDate"`
 	TotalSeats     int       `json:"totalSeats"`
 	SeatsInUse     int       `json:"seatsInUse"`
+}
+
+type Response struct {
+	Success       bool `json:"success"`
+	ErrorResponse struct {
+		ErrorMessage string `json:"errorMessage"`
+	} `json:"error"`
 }

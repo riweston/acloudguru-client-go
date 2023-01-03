@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 )
 
 func (c *Client) GetUsersByPage(i int) (user *[]User, error error) {
@@ -56,6 +57,7 @@ func (c *Client) SetUserActivated(user *User, activate bool) (response *Response
 	var path string
 	if activate {
 		path = fmt.Sprintf("users/%s?action=activate", user.UserId)
+		path = url.PathEscape(path)
 	} else {
 		path = fmt.Sprintf("users/%s?action=deactivate", user.UserId)
 	}

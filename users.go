@@ -86,7 +86,7 @@ func (c *Client) SetUserActivated(user *User, activate bool) (response *Response
 	return response, nil
 }
 
-func (c Client) GetUserFromEmail(email string) (user *User, error error) {
+func (c *Client) GetUserFromEmail(email string) (user *User, error error) {
 	path := fmt.Sprintf("users?email=%s", email)
 	req, err := c.newRequest("GET", path)
 	if err != nil {
